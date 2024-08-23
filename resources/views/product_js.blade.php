@@ -33,6 +33,7 @@ $(document).ready(function(){
 
             },
             error:function(err){
+                 $('.errMsg').empty(); 
                 let error = err.responseJSON;
                 $.each(error.errors,function(index,value){
                     $('.errMsg').append('<span class="text-danger">'+value+'</span>'+'<br>');
