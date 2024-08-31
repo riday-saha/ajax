@@ -14,7 +14,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="alert alert-primary mb-4 text-center">
-                   <h4 >Laravel AJAX Dependent Country State City Dropdown Example  ItSolutionStuff.com</h4>
+                   <h4 >Laravel AJAX Dependent Country State City Dropdown Example</h4>
                 </div> 
                 <form>
                     <div class="form-group mb-3">
