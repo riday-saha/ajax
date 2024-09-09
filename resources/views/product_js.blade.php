@@ -1,183 +1,177 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
-
-
 
 <script>
     $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
 </script>
 
 <script>
-$(document).ready(function(){
-    $(document).on('click','.add_product',function(e){ //we have gotten value
-        e.preventDefault();
-        let name = $('#name').val();
-        let price = $('#price').val();
-        //console.log(name + price);
+    $(document).ready(function(){
+        //code for insert
+        $('.add_student').click(function(e){
+            e.preventDefault();
+            let formData = new FormData();
 
-        $.ajax({
-            url: "{{route('form.create')}}",
-            method: 'POST',
-            data:{name:name , price:price},
-            success:function(res){
-                
-                if(res.status =='success'){
-                $('#exampleModal').modal('hide');
-                $('#addProduct')[0].reset();
-                $('.table').load(location.href+' .table');
-            }
+            formData.append('pro_name', $('#name').val());
+            formData.append('pro_price', $('#price').val());
+            formData.append('pro_image', $('#image')[0].files[0]);
+            formData.append('_token',$('input[name=_token]').val());
 
-            },
-            error:function(err){
-                 $('.errMsg').empty(); 
-                let error = err.responseJSON;
-                $.each(error.errors,function(index,value){
-                    $('.errMsg').append('<span class="text-danger">'+value+'</span>'+'<br>');
-                });
-            }
-        });
-
-    });
-
-    //show products in update form
-    $(document).on('click','.update-product-form',function(){
-        let id = $(this).data('id');
-        let name = $(this).data('name');
-        let price = $(this).data('price');
-
-        $('#up_id').val(id);
-        $('#up_name').val(name);  
-        $('#up_price').val(price); 
-
-    });
-
-    //Update Product
-
-    $(document).on('click', '.up_product', function(e) {
-        e.preventDefault();
-        let up_id = $('#up_id').val();
-        let up_name = $('#up_name').val();
-        let up_price = $('#up_price').val();
-
-        $.ajax({
-            url: "{{ route('update.product') }}",
-            method: 'POST',
-            data: {
-                _token: "{{ csrf_token() }}",
-                up_id: up_id,
-                up_name: up_name,
-                up_price: up_price
-            },
-            success: function(res) {
-                if (res.status == 'success') {
-                    $('#updateModal').modal('hide');
-                    $('#updateProduct')[0].reset();
-                    $('.table').load(location.href + ' .table');
-                }
-            },
-            error: function(err) {
-                $('.errMsg').html(''); // Clear previous errors
-                let errors = err.responseJSON.errors;
-                $.each(errors, function(index, value) {
-                    $('.errMsg').append('<span class="text-danger">' + value + '</span><br>');
-                });
-            }
-        });
-
-    });
-
-    //Delete Product
-    $(document).on('click','.delete_product',function(){
-        let product_id = $(this).data('id');
-
-       
-        if(confirm('Are you sure to delete this product?')){
             $.ajax({
-                url: "{{route('delete.product')}}",
-                method: "POST",
-                data: {pro_id:product_id},
+                url:"{{route('create.product')}}",
+                method:"post",
+                data:formData,
+                contentType:false,
+                processData:false,
                 success:function(res){
                     if(res.status == 'success'){
-                        $('.table').load(location.href + ' .table');
+                        $('#addModal').modal('hide');
+                        $('#addProductForm')[0].reset();
+                        $('.table-responsive').load(location.href+' .table-responsive');
+                    }
+                },
+                error:function(err){
+                    let error = err.responseJSON;
+                    $('.errMsg').html('');
+                    $.each(error.errors, function(index,value){
+                        $('.errMsg').append('<span class="text-danger">'+value+'</span>'+'<br>');
+                    });
+                }
+               
+            });
+        });
+
+        //show data in update form
+        $(document).on('click','.update_button',function(e){
+            e.preventDefault();
+            let show_id= $(this).data('id');
+            let show_name = $(this).data('name');
+            let show_price = $(this).data('price');
+            let show_image = $(this).data('image');
+
+            $('#up_id').val(show_id);
+            $('#up_name').val(show_name);
+            $('#up_price').val(show_price);
+            $('#current_image').attr('src', '/file/' + show_image);
+        });
+
+        //code for update
+        $('.up_product').click(function(e){
+            e.preventDefault();
+            let formData = new FormData();
+            formData.append('update_id', $('#up_id').val());
+            formData.append('update_name', $('#up_name').val());
+            formData.append('update_price', $('#up_price').val());
+
+            let image = $('#up_image')[0].files[0];
+            if(image){
+                formData.append('update_image',image);
+            }
+
+            $.ajax({
+                url:"{{route('update.product')}}",
+                method:"POST",
+                data:formData,
+                contentType:false,
+                processData:false,
+                success:function(res){
+                    if(res.status == 'success'){
+                        $('#updateModal').modal('hide');
+                        $('#updateProduct')[0].reset();
+                        $('.table-responsive').load(location.href +' .table-responsive');
+                    }
+                },
+                error:function(err){
+                    let error = err.responseJSON;
+                    $.each(error.errors,function(index,value){
+                        $('.errMsg').append('<span class="text-danger">'+value+'</span>'+'<br>');
+                    })
+                }
+                
+            });
+        });
+
+        //code for delete
+        $(document).on('click','.delete_btn',function(e){
+            e.preventDefault();
+            let delete_id = $(this).data('id');
+            //console.log(delete_id);
+
+            if(confirm('are u sure?')){
+                $.ajax({
+                url:"{{route('delete.product')}}",
+                method:"post",
+                data:{
+                    delete_id:delete_id
+                },
+                
+                success:function(res){
+                    if(res.status == 'success'){
+                        $('.table-responsive').load(location.href +' .table-responsive');
                     }
                 }
             });
-        }
-    });
 
-    //pagination
-    $(document).on('click','.pagination a',function(e){
-        e.preventDefault();
-        let pageNo = $(this).attr('href').split('page=')[1];
-        product(pageNo);
-    });
-
-    function product(pageNo){
-        $.ajax({
-            url:"/pagination/paginate-data?page="+pageNo,
-            success:function(res){
-                $('.table-data').html(res);
             }
+            
         });
-    }
 
-    //search product
-    $(document).on('keyup',function(event){
-        event.preventDefault();
-        let search_input = $('#search').val();
-        //console.log(search_input);
+        //code for pagination
 
-        $.ajax({
-            url:"{{route('search.product')}}",
-            data:{search_string:search_input},
-            success:function(res){
-                $('.table-data').html(res);
-                if(res.status == 'nothing_found'){
-                    $('.table-data').html('<span class="text-danger">' + 'Nothing Is Found' + '</span>');
+        $(document).on('click','.pagination a',function(e){
+            e.preventDefault();
+            let pageNo = $(this).attr('href').split('page=')[1];
+            
+            $.ajax({
+                url:"/pagination/paginate?page="+pageNo,
+                success:function(res){
+                    $('.table-responsive').html(res);
                 }
-            }
+            });
         });
+
+        //code for search
+        $(document).on('keyup','.search_student',function(e){
+            e.preventDefault();
+           let search = $(this).val();
+            //console.log(search);
+            $.ajax({
+                url:"{{route('product.search')}}",
+                data:{
+                    search:search
+                },
+                success:function(res){
+                    if (res.status === 'Nothing Is Found') {
+                        $('.table-responsive').html('Nothing Is Found');
+                    } else {
+                        $('.table-responsive').html(res); // Insert search results into the table
+                    }
+                }
+            });
+            
+        });
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-});
 </script>

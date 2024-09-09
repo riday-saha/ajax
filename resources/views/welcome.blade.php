@@ -1,74 +1,73 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>CRUD WITH AJAX</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel= "stylesheet" href= "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" >
+
+    <title>Ajax Crud 2</title>
   </head>
   <body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="my-3 text-center">Laravel Ajax Crud</h2>
+                <div class="mb-3 ">
+                    <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">Add Student</a>
+                    <input type="text" placeholder="search" class="form-control search_student" style="display: inline-block; float: right;width:30%">
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered text-center">
+                        <thead>
+                          <tr>
+                            <th scope="col">Product Title</th>
+                            <th scope="col">Price</th>
+                            <th>Image</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach ($show as $seen )
+                            <tr>
+                          <td>{{$seen->name}}</td>
+                          <td>{{$seen->price}}</td>
+                          <td>
+                            <img src="file/{{$seen->image}}" alt="" style="height: 150px;width:200px">
+                          </td>
+                          <td>
+                            <a href="" class="btn btn-primary update_button"
+                            data-id = '{{$seen->id}}'
+                            data-name = '{{$seen->name}}'
+                            data-price ='{{$seen->price}}'  
+                            data-image = '{{$seen->image}}'
 
-    <div class="container d-flex flex-column justify-content-center align-items-center text-center">
-      <h1>CRUD WITH AJAX</h1>
-
-      {{-- <div class="">
-        <a href="" class="btn btn-success d-inline" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Product</a>  
-         <input type="text" id="search"  class="form-control search" placeholder="Search" aria-label="Search">    
-      </div> --}}
-
-      <div class="row justify-content-center w-100 mb-4">
-        <div class="col-md-3 mb-2 mb-md-0">
-          <a href="" class="btn btn-success w-100" id="addProduct" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Product</a>
+                            data-bs-toggle="modal" 
+                            data-bs-target="#updateModal"
+                            ><i class="las la-edit update_btn"></i>
+                            </a>
+                            <a href="" class="btn btn-danger delete_btn"
+                            data-id = '{{$seen->id}}'
+                            >
+                              <i class="las la-trash"></i>
+                            </a>
+                          </td>
+                         </tr>
+                          @endforeach
+                         
+                        </tbody>
+                    </table>
+                    <span>{{$show->links()}}</span>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6">
-          <input type="text" id="search" class="form-control search" placeholder="Search" aria-label="Search">
-        </div>
-      </div>
-
-      <div class="w-75"> 
-        <div class="table-data">
-          <table class="table table-striped" style="border:1px solid black">
-            <thead>
-                <tr>
-                <th scope="col">Product Name</th>
-                <th scope="col">Price</th>
-                <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($show as $shown )
-                <tr>
-                <td>{{$shown->name}}</td>
-                <td>{{$shown->price}}</td>
-                <td>
-                    <a href="" class="btn btn-warning update-product-form"
-                    data-bs-toggle="modal" 
-                    data-bs-target="#updateModal"
-                    data-id = "{{$shown->id}}"
-                    data-name = "{{$shown->name}}"
-                    data-price = "{{$shown->price}}"
-                    >Edit</a>
-                    <a href="" 
-                    class="btn btn-sm btn-danger delete_product"
-                    data-id = "{{$shown->id}}"
-                    >Delete</a>
-                </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-        {{$show->links()}}
-        </div>
-      </div>
-    </div>
-
+    </div> 
+    @include('product_js')
     @include('create')
     @include('update-product')
-    @include('product_js')
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
   </body>
-  <footer class="text-primary text-center" >Developed By Hridoy Saha</footer>
 </html>
