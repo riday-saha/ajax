@@ -17,7 +17,8 @@ route::get('/search', [ProductController::class, 'search'])->name('product.searc
 
 
 
-
+route::get('/all_users',[ProductController::class, 'data']);
+Route::delete('delete-all', [ProductController::class, 'dlt_users'])->name('delete.multi');
 
 
 

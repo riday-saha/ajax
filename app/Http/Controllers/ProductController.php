@@ -124,6 +124,40 @@ class ProductController extends Controller
             ]);
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+    //code for delete multiple at a time using ajax
+
+    public function data(){
+        $all = Product::all();
+        return view('dlt_multiple',compact('all'));
+    }
+    
+    public function dlt_users(Request $request) {
+        $ids = explode(",", $request->ids);
+        $products = Product::whereIn('id', $ids)->get();
+    
+        foreach ($products as $product) {
+            $imagePath = public_path('file/' . $product->image); // Adjust the path if needed
+            if (file_exists($imagePath)) {
+                unlink($imagePath); // Delete the image from the server
+            }
+        }
+    
+        Product::whereIn('id', $ids)->delete(); // Then, delete the records from the database
+    
+        return response()->json(['status' => true, 'message' => "Products successfully removed."]);
+    }
+    
     
 
 
