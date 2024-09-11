@@ -18,7 +18,7 @@
             <div class="col-md-8">
                 <h2 class="my-3 text-center">Laravel Ajax Crud</h2>
                 <div class="mb-3 ">
-                    <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">Add Student</a>
+                    <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">Add Product</a>
                     <input type="text" placeholder="search" class="form-control search_student" style="display: inline-block; float: right;width:30%">
                 </div>
                 <div class="table-responsive">
