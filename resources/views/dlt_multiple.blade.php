@@ -79,7 +79,7 @@
                 alert('Choose minimum one item to remove');
             }else{
                 if(confirm("Are You Sure?")){
-                    var proId = productIdArr.join(",");//problem
+                    var proId = productIdArr.join(",");
                     $.ajax({
                         url:"{{route('delete.multi')}}",
                         type:'DELETE',
