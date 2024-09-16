@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Insert;
 use App\Models\product;
 use Illuminate\Http\Request;
 
@@ -56,7 +57,7 @@ class ProductController extends Controller
 
     //update product
 
-    public function update(Request $request){
+    public function updates(Request $request){
 
         $validations = $request->validate([
             'update_name' =>'nullable|string',
@@ -157,6 +158,51 @@ class ProductController extends Controller
     
         return response()->json(['status' => true, 'message' => "Products successfully removed."]);
     }
+
+
+    //insert checkbox data
+    public function checkbox(){
+        return view('insert_ck');
+    }
+
+    public function insert_box(Request $request){
+        $lenguages = explode(',',$request->select_len);
+
+        $insert = Insert::create([
+            'name' => $request->name,
+            'language' => json_encode($lenguages) 
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data save Successfully'
+        ]);
+    }
+
+    public function show_all(){
+        $show_all = Insert::all();
+        return view('show_checkbox',compact('show_all'));
+    }
+
+    public function update_box(Request $request,$id){
+        $data = Insert::where('id',$id)->first();
+        return view('update_checkbox',compact('data'));
+    }
+
+    public function update_checkbox(Request $request){
+        $Id = Insert::find($request->id);
+        $lenguages = explode(',',$request->selected_len);
+
+        $Id->name = $request->name;
+        $Id->language = json_encode($lenguages);
+        $Id->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data save Successfully'
+        ]);
+    }
+    
     
     
 

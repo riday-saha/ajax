@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\City;
+use App\Models\Range;
 use App\Models\State;
 use App\Models\Country;
+use App\Models\Daterange;
+use App\Models\Selectbox;
 use Illuminate\Http\Request;
 
 class DropdownController extends Controller
@@ -26,6 +29,80 @@ class DropdownController extends Controller
             'cities' => $city
         ]);
     }
+
+
+    //Load Recordings using SelectBox
+    public function select(){
+        $users = Selectbox::all();
+        return view('recording',compact('users'));
+    }
+
+    public function city(Request $request){
+        $slc_city = Selectbox::where('city',$request->city)->get();
+        if($slc_city->count() > 0){
+            $view = view('test',compact('slc_city'))->render();
+            return response()->json([
+                'status' => 'success',
+                'html' => $view
+            ]);
+        }else{
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Select City first'
+            ]);
+        }
+    }
+
+    //range slider
+    public function home(){
+        $record = Range::all();
+        return view('range slider.home',compact('record'));
+    }
+
+    public function age_range(Request $request){
+        $all_age = Range::whereBetween('age',[$request->range1,$request->range2])->get();
+        if($all_age->count() >0){
+            $views = view('range slider.range',compact('all_age'))->render();
+            return response()->json([
+                'status' => 'success',
+                'age' =>$views
+            ]);
+        }
+        else{
+            return response()->json([
+                'status' => 'error',
+                'message' => 'search valid age'
+            ]);
+        }
+    }
+
+    //date range slider
+    public function range_date(){
+        $date = Daterange::all();
+        return view('date_range.data',compact('date'));
+    }
+
+    public function get_date(Request $request) {
+        $date1 = $request->date1;
+        $date2 = $request->date2;
+        
+        $get_data = Daterange::whereBetween('DOB', [$date1, $date2])->get();
+        
+        if ($get_data->count() > 0) {
+            $dates = view('date_range.range_date', compact('get_data'))->render();
+            return response()->json([
+                'status' => 'success',
+                'htmls' => $dates
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => "No data found for the selected date range"
+            ]);
+        }
+    }
+    
+    
 
     
 }

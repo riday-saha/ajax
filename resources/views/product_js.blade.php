@@ -73,7 +73,7 @@
             }
 
             $.ajax({
-                url:"{{route('update.product')}}",
+                url:"{{route('update.products')}}",
                 method:"POST",
                 data:formData,
                 contentType:false,
