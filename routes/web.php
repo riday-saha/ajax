@@ -45,3 +45,8 @@ route::post('/age-range',[DropdownController::class,'age_range'])->name('age.ran
 //range Date slide
 route::get('/date',[DropdownController::class,'range_date'])->name('range.date');
 route::post('/date-range',[DropdownController::class,'get_date'])->name('date.get');
+
+
+//auto compleate
+route::get('/insert',[DropdownController::class,'auto'])->name('auto.compleate');
+route::post('/insert-data',[DropdownController::class,'auto_data'])->name('auto.data');

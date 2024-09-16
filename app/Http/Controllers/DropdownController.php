@@ -101,6 +101,65 @@ class DropdownController extends Controller
             ]);
         }
     }
+
+    //auto compleate textbox
+    public function auto(Request $request){
+
+        if($request->ajax()){
+           $city =  Range::where('city','LIKE',$request->ser_val.'%')->get();
+           $output = '';
+           if($city->count() > 0){
+            $output = '<ul class="list-group" style="display:block;position:relative;z-index:1">';
+            foreach($city as $row){
+                $output .= '<li class="list-group-item">'.$row->city.'</li>';  
+            }
+            $output .= '</ul>';
+           }else{
+            $output .= '<li class="list-group-item m-auto"> No Data Found </li>';
+           }
+           return $output;
+        }
+        return view('auto_com.index');
+    }
+
+    public function auto_data(Request $request){
+        $auto_data = Range::where('city','LIKE','%'.$request->value.'%')->get();
+
+        if($auto_data->count() >0){
+            $new_data = view('auto_com.table',compact('auto_data'))->render();
+            return response()->json([
+                'status' => 'success',
+                'html' => $new_data
+            ]);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     
 
